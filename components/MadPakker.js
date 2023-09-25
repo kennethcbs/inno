@@ -26,7 +26,7 @@ export default function MadPakker({ navigation }) {
 
   // Skubber værdierne amount og test ind i databasen (madpakkeRef)
   const tilføj = async () => {
-    await push(madpakkeRef, { amount: 5, test: "lol" });
+    await push(madpakkeRef, { string: "Pris:", Pris: 399, database: "Henter data fra FireBase RealTime database" });
   };
 
   // Tager objektet og laver det til en liste (array) 
@@ -42,8 +42,8 @@ export default function MadPakker({ navigation }) {
         renderItem={({ item, index }) => {
           return (
             <View>
-              <Text>{item.test}</Text>
-              <Text>{item.amount}</Text>
+              <Text>{item.string} {item.Pris}</Text>
+              <Text>{item.database}</Text>
             </View>
           );
         }}
