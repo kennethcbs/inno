@@ -6,31 +6,35 @@ import { StyleSheet, Text, View } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp, getApps } from "firebase/app";
 import { getDatabase, ref } from "firebase/database";
+import { atomWithStorage } from "jotai/utils";
 
 import { Card } from "react-native-paper";
 
 //Importere vores componenter fra components mappe
-import ProfileScreen from "./components/ProfileScreen";
-import LoginForm from "./components/LoginForm";
-import SignUpForm from "./components/SignUpForm";
+import ProfileScreen from "./components/Login/ProfileScreen";
+import LoginForm from "./components/Login/LoginForm";
+import SignUpForm from "./components/Login/SignUpForm";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA03UDNpBZnHeRkLFJeoOTLD3mVQb_GM5g",
   authDomain: "inno-f31f5.firebaseapp.com",
-  databaseURL: "https://inno-f31f5-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL:
+    "https://inno-f31f5-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "inno-f31f5",
   storageBucket: "inno-f31f5.appspot.com",
   messagingSenderId: "529759488370",
-  appId: "1:529759488370:web:4d99be971bc57ca3ec75eb"
+  appId: "1:529759488370:web:4d99be971bc57ca3ec75eb",
 };
 
-// Initialize Firebase
+// Define global state and export - jotai
+export const atomOrders = atomWithStorage("orders", []);
 
+// Initialize Firebase
 export default function App() {
   const [user, setUser] = useState({ loggedIn: false });
- 
+  
   // Initialiser Firestore og gem den i variablen 'db'
-    initializeApp(firebaseConfig);
+  initializeApp(firebaseConfig);
 
   if (getApps().length < 1) {
     const db = getFirestore(); // Initialiser Firestore og gem den i variablen 'db'
@@ -61,7 +65,7 @@ export default function App() {
     };
   }, []);
 
-  //Gæstekomponent der viser en sign-up og login side 
+  //Gæstekomponent der viser en sign-up og login side
   const GuestPage = () => {
     return (
       <View style={styles.container}>
@@ -79,8 +83,8 @@ export default function App() {
       </View>
     );
   };
-// Ternær operator der afgør hvor man bliver ført hen på hvilken siden, alt efter om man er logget ind eller ej 
-  return user.loggedIn ? <ProfileScreen /> : <GuestPage />;
+  // Ternær operator der afgør hvor man bliver ført hen på hvilken siden, alt efter om man er logget ind eller ej
+  return user.loggedIn ? <GuestPage /> : <ProfileScreen />;
 }
 
 const styles = StyleSheet.create({
